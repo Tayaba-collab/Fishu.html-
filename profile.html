@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Profile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <a href="teacher.html">Teacher Portal</a>
+    <a href="quiz.html">Student Quizzes</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+
+  <section class="container">
+    <h2>Student Profile</h2>
+    <p>Track your learning journey, stars, badges, and quiz history.</p>
+
+    <div id="profileData">Loading profile data from AI...</div>
+  </section>
+
+  <script>
+    window.onload = async () => {
+      const profileEl = document.getElementById("profileData");
+      try {
+        const res = await fetch("http://localhost:8000/api/student-profile");
+        const data = await res.json();
+
+        profileEl.innerHTML = `
+          <p><strong>Total Stars:</strong> ${data.stars}</p>
+          <p><strong>Badges:</strong> ${data.badges.join(", ")}</p>
+          <h4>Quiz History:</h4>
+          <ul>${data.history.map(q => `<li>${q}</li>`).join("")}</ul>
+        `;
+      } catch (err) {
+        profileEl.innerHTML = `<p style='color:red;'>Error: ${err.message}</p>`;
+      }
+    };
+  </script>
+</body>
+</html>
